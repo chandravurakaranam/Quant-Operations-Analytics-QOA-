@@ -1,0 +1,37 @@
+name: Quant & Management Science Pipeline
+
+on:
+  schedule:
+    # Runs automatically every Monday at 08:00 UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  run-analytics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Analytics Engine
+        run: python main.py
+
+      - name: Commit and Push Updated Results
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md portfolio_weights.png
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated update: Quant & MS analytics results" && git push)
