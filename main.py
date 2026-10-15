@@ -55,28 +55,32 @@ plt.close()
 # ==========================================
 # 2. MANAGEMENT SCIENCE: SUPPLY CHAIN NETWORK LP MODEL
 # ==========================================
-# Network Problem: Minimize shipping costs from 2 Factories to 3 Warehouses
-supply = [1000, 1500]       # Plant capacity
-demand = [700, 800, 900]    # Warehouse demand
-# Shipping cost matrix ($/unit)
-costs = np.array([
-    [4, 6, 8],  # Plant A to W1, W2, W3
-    [5, 3, 7]   # Plant B to W1, W2, W3
-])
+# Objective: Minimize shipping costs from 2 Factories to 3 Warehouses
+# Shipping costs ($/unit):
+# Plant A -> W1: $4, W2: $6, W3: $8
+# Plant B -> W1: $5, W2: $3, W3: $7
+c = [4, 6, 8, 5, 3, 7]
 
-# Solve using scipy.optimize.linprog
-c = costs.flatten()
-A_eq = np.array([
-    [1, 1, 1, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1],
-    [1, 0, 0, 1, 0, 0],
-    [0, 1, 0, 0, 1, 0],
-    [0, 0, 1, 0, 0, 1]
-])
-b_eq = [supply[0], supply[1], demand[0], demand[1], demand[2]]
+# Supply constraints (Capacity: Plant A <= 1000, Plant B <= 1500)
+A_ub = [
+    [1, 1, 1, 0, 0, 0],  # Plant A capacity limit
+    [0, 0, 0, 1, 1, 1]   # Plant B capacity limit
+]
+b_ub = [1000, 1500]
 
-res = minimize(lambda x: np.dot(x, c), x0=np.zeros(6), bounds=[(0, None)]*6,
-               constraints={'type': 'eq', 'fun': lambda x: np.dot(A_eq, x) - b_eq})
+# Demand constraints (W1 = 700, W2 = 800, W3 = 900)
+A_eq = [
+    [1, 0, 0, 1, 0, 0],  # Warehouse 1 demand
+    [0, 1, 0, 0, 1, 0],  # Warehouse 2 demand
+    [0, 0, 1, 0, 0, 1]   # Warehouse 3 demand
+]
+b_eq = [700, 800, 900]
+
+# All shipments must be non-negative
+bounds = [(0, None)] * 6
+
+# Solve using Simplex Linear Programming solver
+res = linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs')
 min_cost = res.fun
 
 # ==========================================
