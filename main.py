@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import yfinance as yf
-from scipy.optimize import minimize
+from scipy.optimize import minimize, linprog
 import matplotlib.pyplot as plt
 from datetime import datetime
 
