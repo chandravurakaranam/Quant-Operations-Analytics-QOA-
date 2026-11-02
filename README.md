@@ -1,12 +1,12 @@
 # Quantitative Studies & Management Science Analytics Pipeline
 
-*Automated model execution timestamp:* **2026-11-01 14:54:22 UTC**
+*Automated model execution timestamp:* **2026-11-02 18:07:19 UTC**
 
 ## 📊 1. Quantitative Portfolio Optimization (Markowitz Model)
 - **Target Assets:** `AAPL, MSFT, GOOGL, AMZN, GLD`
-- **Expected Annual Return:** `27.76%`
-- **Annualized Volatility:** `24.12%`
-- **Sharpe Ratio (Risk-Free Rate 4%):** `0.98`
+- **Expected Annual Return:** `26.34%`
+- **Annualized Volatility:** `24.20%`
+- **Sharpe Ratio (Risk-Free Rate 4%):** `0.92`
 
 ### Optimal Asset Allocation
 ![Portfolio Weights](portfolio_weights.png)
